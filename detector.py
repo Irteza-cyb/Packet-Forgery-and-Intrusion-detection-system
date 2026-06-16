@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime
 
+# 1. LINK THE FORGER CODE HERE
+from forger import send_spoofed_syn_ack
 
 @dataclass
 class PacketInfo:
@@ -42,6 +44,14 @@ class Detector:
         print(f"Target Port    : {packet.destination_port}")
         print("Response Type  : SYN-ACK (Simulated)")
         print(f"ACK Number     : {result['ack_number']}")
+
+        # 2. TRIGGER THE FORGER ENGINE WITH THE CALCULATED DATA
+        send_spoofed_syn_ack(
+            hacker_ip=packet.source_ip,
+            target_port=packet.destination_port,
+            hacker_port=packet.source_port,
+            ack_number=result['ack_number']
+        )
 
         return result
 
