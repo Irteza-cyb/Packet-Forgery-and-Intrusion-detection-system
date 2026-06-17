@@ -3,6 +3,7 @@ import argparse
 from scapy.all import sniff, IP, TCP
 # Imports the dataclass and engine from your detector.py file
 from detector import Detector, PacketInfo
+from database import init_db
 
 # Configure logging so INFO messages actually print to the terminal
 logging.basicConfig(level=logging.INFO, format='%(message)s')
@@ -14,7 +15,7 @@ def packet_callback(packet):
     if packet.haslayer(IP) and packet.haslayer(TCP):
         tcp_flags = packet[TCP].flags
 
-        if tcp_flags == "S":
+        if "S" in str(tcp_flags):
             logging.warning(f"SCAN DETECTED: Host {packet[IP].src} is probing Port {packet[TCP].dport}")
             
             # Pack the raw Scapy data into the Dataclass format the detector expects
@@ -39,6 +40,8 @@ def start_sniffer(interface_name):
     )
 
 if __name__ == "__main__":
+    print("[*] Verifying Database Health...")
+    init_db()
     parser = argparse.ArgumentParser(description="Packet Forgery and Intrusion Detection System")
     parser.add_argument("-i", "--interface", help="Network interface to sniff on", default=None)
     args = parser.parse_args()

@@ -3,6 +3,7 @@ from datetime import datetime
 
 # 1. LINK THE FORGER CODE HERE
 from forger import send_spoofed_syn_ack
+from database import log_attack
 
 @dataclass
 class PacketInfo:
@@ -49,8 +50,14 @@ class Detector:
         send_spoofed_syn_ack(
             hacker_ip=packet.source_ip,
             target_port=packet.destination_port,
-            hacker_port=packet.source_port,
-            ack_number=result['ack_number']
+            hacker_port=packet.source_port
+        )
+
+        # Action 2: TRIGGER DATABASE LOGGING
+        log_attack(
+            attacker_ip=packet.source_ip,
+            target_port=packet.destination_port,
+            attack_type="SYN Scan"
         )
 
         return result
