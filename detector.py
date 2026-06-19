@@ -50,7 +50,7 @@ class Detector:
             hacker_ip=packet.source_ip,
             target_port=packet.destination_port,
             hacker_port=packet.source_port,
-            ack_number=result['ack_number']
+            
         )
 
         return result
