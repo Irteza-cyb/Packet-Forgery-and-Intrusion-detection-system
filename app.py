@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, scrolledtext
+from rules_panel import DetectionRulesPanel
+from analytics_panel import AnalyticsPanel
 
 # --- Theme Configuration Constants ---
 BG_MAIN = "#0a0b10"
