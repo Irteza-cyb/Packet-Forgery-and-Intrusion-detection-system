@@ -93,7 +93,7 @@ class ScapyShieldApp:
         tk.Label(console_hdr, text="💻 Live Sniffer Console", font=("Arial", 10, "bold"), fg=NEON_CYAN, bg=BG_SURFACE).pack(side="left")
         tk.Label(console_hdr, text="● Sniffing...", font=("Arial", 9, "bold"), fg=NEON_GREEN, bg=BG_SURFACE).pack(side="right")
 
-        console_text = scrolledtext.ScrolledText(console_panel, bg=BG_CONSOLE, fg=TEXT_MUTED, insertbackground=NEON_CYAN, font=("Courier New", 9.5), bd=0, padx=10, pady=10)
+        console_text = scrolledtext.ScrolledText(console_panel, bg=BG_CONSOLE, fg=TEXT_MUTED, insertbackground=NEON_CYAN, font=("Courier New", 10), bd=0, padx=10, pady=10)
         console_text.pack(fill="both", expand=True)
         
         # Populate Console Logs with color tags
@@ -135,7 +135,7 @@ class ScapyShieldApp:
         lbl_val.pack(anchor="w", padx=12, pady=(0, 10))
 
     def create_component_item(self, parent, filename, desc, status, accent_color):
-        item_frame = tk.Frame(parent, bg=BG_MAIN, bd=1, relief="flat", highlightthickness=1, highlightbackground="rgba(255,255,255,0.05)")
+        item_frame = tk.Frame(parent, bg=BG_MAIN, bd=1, relief="flat", highlightthickness=1, highlightbackground="#262626")
         item_frame.pack(fill="x", padx=12, pady=8, ipady=4)
 
         text_container = tk.Frame(item_frame, bg=BG_MAIN)
