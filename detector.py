@@ -1,8 +1,8 @@
+# detector.py (Updated Section)
 from dataclasses import dataclass
 from datetime import datetime
-
-# 1. LINK THE FORGER CODE HERE
 from forger import send_spoofed_syn_ack
+from database import log_attack  # <-- Import the database lead's function
 
 @dataclass
 class PacketInfo:
@@ -12,17 +12,8 @@ class PacketInfo:
     destination_port: int
     sequence_number: int
 
-
 class Detector:
-    """
-    Simulated Packet Response Engine
-
-    Demonstrates packet analysis and response generation
-    without transmitting any real network traffic.
-    """
-
     def build_response(self, packet: PacketInfo):
-
         response = {
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "source_ip": packet.source_ip,
@@ -31,40 +22,28 @@ class Detector:
             "response_type": "SYN-ACK",
             "ack_number": packet.sequence_number + 1
         }
-
         return response
 
-    def process_packet(self, packet: PacketInfo):
-
+    def process_packet(self, packet: PacketInfo, ui_callback=None):
         result = self.build_response(packet)
 
-        print("\n[Detector Engine]")
-        print(f"Source IP      : {packet.source_ip}")
-        print(f"Source Port    : {packet.source_port}")
-        print(f"Target Port    : {packet.destination_port}")
-        print("Response Type  : SYN-ACK (Simulated)")
-        print(f"ACK Number     : {result['ack_number']}")
+        # 1. Save attack signatures immediately to SQLite Database
+        log_attack(packet.source_ip, packet.destination_port, "SYN Scan")
 
-        # 2. TRIGGER THE FORGER ENGINE WITH THE CALCULATED DATA
+        # 2. Format and output messages to the UI Console securely
+        if ui_callback:
+            ui_callback(f"[Detector Engine] Source IP: {packet.source_ip} -> Target Port: {packet.destination_port} | Generated ACK: {result['ack_number']}", tag="success")
+            ui_callback("[*] FORGER MODULE ACTIVATED", tag="forger")
+            ui_callback(f"[*] Assembling Layer 3 & Layer 4 packets with SYN-ACK flags...", tag="forger")
+
+        # 3. Trigger raw Scapy wire injections via Forger module
         send_spoofed_syn_ack(
             hacker_ip=packet.source_ip,
             target_port=packet.destination_port,
             hacker_port=packet.source_port,
-            
         )
+        
+        if ui_callback:
+            ui_callback("[+] INJECTION SUCCESSFUL. Scanner Deceived.\n", tag="success")
 
         return result
-
-
-if __name__ == "__main__":
-
-    sample_packet = PacketInfo(
-        source_ip="192.168.1.100",
-        source_port=45678,
-        destination_ip="192.168.1.10",
-        destination_port=80,
-        sequence_number=1000
-    )
-
-    detector = Detector()
-    detector.process_packet(sample_packet)
