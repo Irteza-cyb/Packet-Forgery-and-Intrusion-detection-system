@@ -1,23 +1,32 @@
 import logging
 import argparse
+from datetime import datetime
 from scapy.all import sniff, IP, TCP
-# Imports the dataclass and engine from your detector.py file
 from detector import Detector, PacketInfo
 
-# Configure logging so INFO messages actually print to the terminal
-logging.basicConfig(level=logging.INFO, format='%(message)s')
+# Configure logging with timestamp format
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] %(message)s',
+    datefmt='%H:%M:%S'
+)
 
 # Initialize the detector engine globally
 detector_engine = Detector()
+packet_count = 0
+scan_count = 0
 
 def packet_callback(packet):
+    global packet_count, scan_count
+
     if packet.haslayer(IP) and packet.haslayer(TCP):
+        packet_count += 1
         tcp_flags = packet[TCP].flags
 
         if tcp_flags == "S":
-            logging.warning(f"SCAN DETECTED: Host {packet[IP].src} is probing Port {packet[TCP].dport}")
-            
-            # Pack the raw Scapy data into the Dataclass format the detector expects
+            scan_count += 1
+            logging.warning(f"[!] SYN SCAN DETECTED #{scan_count} | Source: {packet[IP].src}:{packet[TCP].sport} -> Port: {packet[TCP].dport}")
+
             scanned_packet_data = PacketInfo(
                 source_ip=packet[IP].src,
                 source_port=packet[TCP].sport,
@@ -25,17 +34,20 @@ def packet_callback(packet):
                 destination_port=packet[TCP].dport,
                 sequence_number=packet[TCP].seq
             )
-            
-            # Pass the structured object to the detector engine
+
             detector_engine.process_packet(scanned_packet_data)
+        else:
+            logging.info(f"[*] Packet #{packet_count} | {packet[IP].src} -> {packet[IP].dst} | Flags: {tcp_flags}")
 
 def start_sniffer(interface_name):
-    logging.info(f"[*] Starting ScapyShield sniffer on interface: {interface_name if interface_name else 'Default'}")
+    iface_display = interface_name if interface_name else 'Default'
+    logging.info(f"[*] ScapyShield sniffer started on interface: {iface_display}")
+    logging.info(f"[*] Listening for TCP traffic... Press Ctrl+C to stop.\n")
     sniff(
-        iface=interface_name,   
-        filter="tcp",           
-        prn=packet_callback,    
-        store=0                 
+        iface=interface_name,
+        filter="tcp",
+        prn=packet_callback,
+        store=0
     )
 
 if __name__ == "__main__":
@@ -46,5 +58,5 @@ if __name__ == "__main__":
     try:
         start_sniffer(args.interface)
     except KeyboardInterrupt:
-        print("\n")  
-        logging.info("[!] Ctrl+C detected. Exiting ScapyShield. Goodbye!")
+        print("\n")
+        logging.info(f"[!] Exiting ScapyShield. Total Packets: {packet_count} | Scans Detected: {scan_count}")
