@@ -29,14 +29,14 @@ def packet_callback(packet):
         if ui_logger:
             ui_logger(msg, tag="warning")
             
-        # 3. Extract MAC addresses safely
+        
         src_mac = packet[Ether].src if packet.haslayer(Ether) else "00:00:00:00:00:00"
         dst_mac = packet[Ether].dst if packet.haslayer(Ether) else "00:00:00:00:00:00"
             
-        # 4. Safely check for interface attribute
-        current_iface = getattr(packet, 'sniffed_on', "Default")
+      
+        current_iface = getattr(packet, 'sniffed_on', "None")
             
-        # 5. Build the data blueprint
+       
         scanned_packet_data = PacketInfo(
             source_ip=packet[IP].src,
             source_port=packet[TCP].sport,
