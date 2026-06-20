@@ -168,6 +168,7 @@ class ScapyShieldApp:
             self.current_panel.pack(fill="both", expand=True)
         elif view_name == "analytics":
             self.current_panel = AnalyticsPanel(self.viewport_frame)
+            self.current_panel.pack(fill="both", expand=True)
 
     def load_console_panel(self):
         """Builds your default main live console view layout"""
