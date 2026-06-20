@@ -203,6 +203,7 @@ class ScapyShieldApp:
         self.console_text.tag_config('warning', foreground=NEON_YELLOW)
         self.console_text.tag_config('success', foreground=NEON_GREEN)
         self.console_text.tag_config('forger', foreground=NEON_CYAN)
+        self.console_text.tag_config('error', foreground=NEON_MAGENTA)
 
         self.console_text.configure(state="normal")
         self.console_text.insert(tk.END, "[*] GUI Console Thread Attached Successfully.\n")
