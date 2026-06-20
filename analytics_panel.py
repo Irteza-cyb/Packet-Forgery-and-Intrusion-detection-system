@@ -7,7 +7,7 @@ class AnalyticsPanel:
         self.frame.pack(fill="both", expand=True)
         
         lbl = tk.Label(
-            self.frame, 
+            self,
             text="📊 Analytics Panel Placeholder\n(Waiting for teammate's final code UI)", 
             font=("Arial", 12, "bold"), 
             fg="#6272a4", 
