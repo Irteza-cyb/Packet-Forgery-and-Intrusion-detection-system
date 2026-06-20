@@ -1,10 +1,9 @@
 import tkinter as tk
 
-class AnalyticsPanel:
+class AnalyticsPanel(tk.Frame):
     def __init__(self, parent_frame):
-        # Create a placeholder layout so the app doesn't crash
-        self.frame = tk.Frame(parent_frame, bg="#0a0b10")
-        self.frame.pack(fill="both", expand=True)
+        
+        super().__init__(parent_frame, bg="#0a0b10")
         
         lbl = tk.Label(
             self,
