@@ -1,5 +1,7 @@
 import sqlite3
+import config
 
+DB_NAME = config.DATABASE_NAME
 DB_NAME = "scapyshield.db"
 
 def get_db_connection():

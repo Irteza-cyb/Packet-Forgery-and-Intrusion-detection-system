@@ -1,13 +1,12 @@
 import tkinter as tk
 
-class AnalyticsPanel:
+class AnalyticsPanel(tk.Frame):
     def __init__(self, parent_frame):
-        # Create a placeholder layout so the app doesn't crash
-        self.frame = tk.Frame(parent_frame, bg="#0a0b10")
-        self.frame.pack(fill="both", expand=True)
+        
+        super().__init__(parent_frame, bg="#0a0b10")
         
         lbl = tk.Label(
-            self.frame, 
+            self,
             text="📊 Analytics Panel Placeholder\n(Waiting for teammate's final code UI)", 
             font=("Arial", 12, "bold"), 
             fg="#6272a4", 

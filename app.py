@@ -168,6 +168,7 @@ class ScapyShieldApp:
             self.current_panel.pack(fill="both", expand=True)
         elif view_name == "analytics":
             self.current_panel = AnalyticsPanel(self.viewport_frame)
+            self.current_panel.pack(fill="both", expand=True)
 
     def load_console_panel(self):
         """Builds your default main live console view layout"""
@@ -203,6 +204,7 @@ class ScapyShieldApp:
         self.console_text.tag_config('warning', foreground=NEON_YELLOW)
         self.console_text.tag_config('success', foreground=NEON_GREEN)
         self.console_text.tag_config('forger', foreground=NEON_CYAN)
+        self.console_text.tag_config('error', foreground=NEON_MAGENTA)
 
         self.console_text.configure(state="normal")
         self.console_text.insert(tk.END, "[*] GUI Console Thread Attached Successfully.\n")
